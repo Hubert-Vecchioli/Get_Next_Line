@@ -6,7 +6,7 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 02:55:47 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/20 03:51:54 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:10:48 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,57 @@
 
 char	*get_next_line(int fd)
 {
-   	static char		*buffer[BUFFER_SIZE + 1];
+	static t_buffer	buffer[MAX_FD];
 	char			*line;
 	size_t			bytesread;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd > MAX_FD)
 		return (NULL);
-	line = calloc(1, sizeof(char));
-	line = ft_strjoin(line, buffer);
+	line = ft_strjoin(calloc(1, sizeof(char)), buffer[fd], 0);
 	if (line == NULL)
 		return (NULL);
 	bytesread = 1;
-	ft_bzero
-	while (bytes_read > 0 && ft_strchr_id(line, '\n') == -1)
+	while (bytesread > 0 && ft_strchr_id(line, '\n') == -1)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read < 0)
+		bytesread = read(fd, (*buffer[fd]).content, BUFFER_SIZE);
+		if (bytesread < 0)
 			return (free(line), NULL);
-		buffer[bytes_read] = 0;
-		line = ft_strjoin(line, buffer)
+		line = ft_strjoin(line, buffer[fd], bytesread);
 		if (line == NULL)
 			return (NULL);
-	ft_clean(line, buffer, '\n');
+	}
+	ft_clean(line, buffer[fd], '\n');
 	if (line[0] == 0)
 		return (NULL);
-	else
-		return (line);
-	}
+	return (line);
+}
+
+char	*ft_bfrjoin(char *s1, t_buffer *buffer, size_t s1_len)
+{
+	char	*result;
+	size_t		i;
+
+	// protection missing
+	result = malloc((s1_len + (*buffer[fd]).size) * sizeof(char));
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, s1, ft_strlen(s1) + 1);
+	ft_strlcat(result, s2, ft_strlen(s2) + ft_strlen(s1) + 1);
+	return (result);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-		char    *result;
+	char	*result;
 
-		if (!s1 || !s2)
-			return (NULL);
-		result = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-		if (!result)
-				return (NULL);
-		ft_strlcpy(result, s1, ft_strlen(s1) + 1);
-		ft_strlcat(result, s2, ft_strlen(s2) + ft_strlen(s1) + 1);
-		return (result);
+	if (!s1 || !s2)
+		return (NULL);
+	result = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, s1, ft_strlen(s1) + 1);
+	ft_strlcat(result, s2, ft_strlen(s2) + ft_strlen(s1) + 1);
+	return (result);
 }
 
 int	ft_strchr_id(char *str, char to_find)
@@ -73,6 +83,7 @@ int	ft_strchr_id(char *str, char to_find)
 	}
 	return (i);
 }
+
 void	ft_clean(char *line, char *buffer, char to_find)
 {
 	int	i;

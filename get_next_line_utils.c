@@ -6,7 +6,7 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 02:56:33 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/20 02:57:23 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/05/23 10:16:45 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ size_t	ft_strlen(const char *str)
 {
 	size_t	lenght;
 
-    if (!str)
+	if (!str)
 		return (0);
 	lenght = 0;
 	while (str[lenght])
