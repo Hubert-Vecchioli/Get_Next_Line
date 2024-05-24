@@ -6,7 +6,7 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 02:56:07 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/23 13:10:45 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/05/24 03:04:24 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,16 @@
 
 typedef struct s_buffer
 {
-	char	content[MAX_FD][BUFFER_SIZE];
-	size_t	size[MAX_FD];
+	char	content[BUFFER_SIZE];
+	size_t	size;
 }	t_buffer;
 
 char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *s2);
-int		ft_strchr_id(char *str, char to_find);
-void	ft_clean(char *line, char *buffer, char to_find);
+char	*ft_clean(char *line, t_buffer *buffer, size_t line_len, char to_find);
+char	*ft_bfrjoin(char *line, t_buffer *buffer, size_t line_len);
+int		ft_strchr(char *str, char to_find);
+size_t	ft_max(size_t a, size_t b);
 void	ft_bzero(void *ptr, size_t n);
 void	*ft_calloc(size_t n, size_t size);
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-size_t	ft_strlcat(char *dest, const char *src, size_t size);
-size_t	ft_strlen(const char *str);
 
 #endif

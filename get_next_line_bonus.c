@@ -6,88 +6,109 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 08:29:04 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/23 10:15:04 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/05/24 04:03:10 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {
-	static char		buffer[MAX_FD][BUFFER_SIZE + 1];
+	static t_buffer	buffer[MAX_FD];
 	char			*line;
-	size_t			bytesread;
+	size_t			line_len;
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || fd > MAX_FD)
 		return (NULL);
-	line = ft_strjoin(calloc(1, sizeof(char)), buffer[fd]);
+	line = ft_bfrjoin(NULL, &buffer[fd], 0);
 	if (line == NULL)
 		return (NULL);
-	bytesread = 1;
-	while (bytesread > 0 && ft_strchr_id(line, '\n') == -1)
+	line_len = buffer[fd].size;
+	buffer[fd].size = ft_max(1, buffer[fd].size);
+	while (buffer[fd].size > 0 && ft_strchr(line, '\n') == 0)
 	{
-		bytesread = read(fd, buffer[fd], BUFFER_SIZE);
-		if (bytesread < 0)
+		buffer[fd].size = read(fd, buffer[fd].content, BUFFER_SIZE);
+		if (buffer[fd].size > 0)
+			line = ft_bfrjoin(line, &buffer[fd], line_len);
+		line_len += buffer[fd].size;
+		if (line == NULL || line_len == 0)
 			return (free(line), NULL);
-		buffer[fd][bytesread] = 0;
-		line = ft_strjoin(line, buffer[fd]);
-		if (line == NULL)
-			return (NULL);
 	}
-	ft_clean(line, buffer[fd], '\n');
-	if (line[0] == 0)
-		return (NULL);
-	return (line);
+	return (ft_clean(line, &buffer[fd], line_len, '\n'));
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+size_t	ft_max(size_t a, size_t b)
 {
-	char	*result;
+	if (a >= b)
+		return (a);
+	return (b);
+}
 
-	if (!s1 || !s2)
-		return (NULL);
-	result = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+char	*ft_bfrjoin(char *line, t_buffer *buffer, size_t line_len)
+{
+	char		*result;
+	size_t		i;
+
+	if (line_len + (*buffer).size == 0)
+		return (calloc(1, sizeof(char)));
+	result = malloc((line_len + (*buffer).size) * sizeof(char));
 	if (!result)
-		return (NULL);
-	ft_strlcpy(result, s1, ft_strlen(s1) + 1);
-	ft_strlcat(result, s2, ft_strlen(s2) + ft_strlen(s1) + 1);
+		return (free(line), NULL);
+	i = 0;
+	while (i < line_len)
+	{
+		result[i] = line[i];
+		i++;
+	}
+	result[i] = 0;
+	while (i < line_len + (*buffer).size)
+	{
+		result[i] = (*buffer).content[i - line_len];
+		i++;
+	}
+	result[i] = 0;
+	free(line);
 	return (result);
 }
 
-int	ft_strchr_id(char *str, char to_find)
+int	ft_strchr(char *str, char to_find)
 {
 	int	i;
 
 	i = 0;
 	if (!str)
-		return (-1);
+		return (0);
 	i = 0;
-	while (str[i] != (char)to_find)
+	while (str[i] != to_find)
 	{
 		if (str[i] == 0)
-			return (-1);
+			return (0);
 		i++;
 	}
-	return (i);
+	return (i + 1);
 }
 
-void	ft_clean(char *line, char *buffer, char to_find)
+char	*ft_clean(char *line, t_buffer *buffer, size_t line_len, char to_find)
 {
-	int	i;
-	int	j;
+	char	*result;
+	size_t	result_len;
+	size_t	i;
 
-	i = 0;
-	j = 0;
-	while (line[i] && line[i] != to_find)
-		i++;
-	if (line[i] == to_find)
-		i++;
-	while (line[i] && buffer[j])
-	{
-		buffer[j] = line[i];
-		line[i] = 0;
-		i++;
-		j++;
-	}
-	buffer[j] = 0;
+	if (ft_strchr(line, to_find) == 0)
+		result_len = line_len;
+	else
+		result_len = ft_strchr(line, to_find);
+	result = malloc(sizeof(char) * (result_len + 1));
+	if (!result)
+		return (free(line), NULL);
+	i = -1;
+	while (++i < result_len)
+		result[i] = line[i];
+	i--;
+	result[result_len] = 0;
+	while (++i < line_len)
+		(*buffer).content[i - result_len] = line[i];
+	(*buffer).size = line_len - result_len;
+	free(line);
+	return (result);
 }

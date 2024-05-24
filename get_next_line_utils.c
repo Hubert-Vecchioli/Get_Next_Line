@@ -6,7 +6,7 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 02:56:33 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/23 10:16:45 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/05/23 23:32:49 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,56 +35,4 @@ void	ft_bzero(void *ptr, size_t n)
 		((char *)ptr)[i] = 0;
 		i++;
 	}
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	i;
-
-	i = 0;
-	if (size < 1)
-		return (ft_strlen(src));
-	while (src[i] && i < (size - 1))
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-	return (ft_strlen(src));
-}
-
-size_t	ft_strlcat(char *dest, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	dest_size;
-	size_t	src_len;
-
-	if ((dest == NULL || src == NULL) && !size)
-		return (0);
-	i = 0;
-	dest_size = ft_strlen(dest);
-	src_len = ft_strlen(src);
-	if (dest_size >= size)
-		return (src_len + size);
-	while (src[i] && i < (size - dest_size - 1))
-	{
-		dest[dest_size + i] = src[i];
-		i++;
-	}
-	dest[dest_size + i] = 0;
-	return (dest_size + src_len);
-}
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	lenght;
-
-	if (!str)
-		return (0);
-	lenght = 0;
-	while (str[lenght])
-	{
-		lenght++;
-	}
-	return (lenght);
 }
