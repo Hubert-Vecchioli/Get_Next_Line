@@ -6,11 +6,11 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:15:34 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/24 03:22:01 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/05/27 12:48:22 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_calloc(size_t n, size_t size)
 {
