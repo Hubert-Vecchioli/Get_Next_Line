@@ -6,11 +6,9 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 08:29:04 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/27 12:47:24 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/06/13 12:56:53 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
@@ -35,7 +33,7 @@ char	*get_next_line(int fd)
 			line = ft_bfrjoin(line, &buffer[fd], line_len);
 		line_len += buffer[fd].size;
 		if (line == NULL || line_len == 0 || buffer[fd].size == -1)
-			return (free(line), NULL);
+			return (free(line), buffer[fd].size = 0, NULL);
 	}
 	return (ft_clean(line, &buffer[fd], line_len, '\n'));
 }

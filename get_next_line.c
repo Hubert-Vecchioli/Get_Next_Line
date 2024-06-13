@@ -6,7 +6,7 @@
 /*   By: hvecchio <hvecchio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 02:55:47 by hvecchio          #+#    #+#             */
-/*   Updated: 2024/05/24 03:58:29 by hvecchio         ###   ########.fr       */
+/*   Updated: 2024/06/13 12:56:36 by hvecchio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_next_line(int fd)
 			line = ft_bfrjoin(line, &buffer[fd], line_len);
 		line_len += buffer[fd].size;
 		if (line == NULL || line_len == 0 || buffer[fd].size == -1)
-			return (free(line), NULL);
+			return (free(line), buffer[fd].size = 0, NULL);
 	}
 	return (ft_clean(line, &buffer[fd], line_len, '\n'));
 }
